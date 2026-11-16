@@ -42,8 +42,11 @@ or its drawing configuration changes.
 ## Model Files
 
 The `model` folder contains the 3D model files for the project.
+`model/original/` holds the unmodified source files and `model/custom/` holds the modified versions used for printing.
+See [model/README.md](model/README.md) for what each file is, how it was modified, and which ones are currently printed.
 
-- [Trackball case body - 25 mm](model/trackball-case-25mm-Body.stl)
+- [Trackball case body - 25 mm (original)](model/original/trackball-case/trackball-case-25mm-Body.stl)
+- [Trackball case body - 25 mm (for the official moNa2 case)](model/custom/trackball-case/trackball-case-25mm-Body_mona2official.stl)
 
 ## Firmware
 
