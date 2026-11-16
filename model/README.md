@@ -28,7 +28,7 @@ model/
 
 | 部品 | 左 | 右 |
 | --- | --- | --- |
-| ボトムケース | `custom/bottom-case-official/mona2-case_mag_L_battery_mag1mm.stl` | `custom/bottom-case-official/mona2-case_mag_R_battery_mag1mm.stl` |
+| ボトムケース | `custom/bottom-case-official/mona2-case_mag_L_deepscrew_1.8.stl`（公式と同一） | `custom/bottom-case-official/mona2-case_mag_R_deepscrew_1.8.stl` |
 | トッププレート | `original/topplate/topplate_xiaocover_L.stl`（無加工） | `custom/top-plate/topplate_xiaocover_R_padcover_v6.stl` |
 | トラックボールケース | — | `custom/trackball-case/trackball-case-25mm-Body_mona2official.stl`（19mm球なら `…19mm-ortho-Body_mona2official.stl`） |
 
@@ -40,7 +40,8 @@ model/
 flowchart LR
   OC[original/official-case/<br>mona2_case.stl] -->|左右に分割| MAG[mona2-case_mag_L / _R]
   MAG -->|バッテリー穴拡大| BAT[…_battery]
-  BAT -->|マグネット穴 +1mm| M1[…_battery_mag1mm]
+  BAT -->|マグネット穴 +1mm| M1[…_battery_mag1mm<br>※非推奨]
+  MAG -->|右のみ: トラックボール用<br>ネジ座ぐりを深く| DS[…_deepscrew_1.8<br>★現行]
 
   TPR[original/topplate/<br>topplate_xiaocover_R] -->|パッドカバー結合| P1[old/…_padcover_v1]
   P1 -->|Xiaoカバーを左から作り直し 他| P6[…_padcover_v6]
@@ -72,19 +73,26 @@ flowchart LR
 
 ### bottom-case-official/ — 公式マグネットケースの加工版
 
-元: `original/official-case/mona2_case.stl`。3段階で加工しており、**最終版は `_battery_mag1mm`**。
+元: `original/official-case/mona2_case.stl`。
+**現行は `_deepscrew_1.8`**（公式そのまま + 右のトラックボール用ネジ穴だけ加工）。
+`_battery` / `_battery_mag1mm` 系は下記の問題があったため使っていない（記録として残している）。
 
 | ファイル | 加工内容 |
 | --- | --- |
 | `mona2-case_mag_L.stl` / `_R.stl` | ① 左右一体のSTLを左右に分割しただけ。形状は無加工。座標は元STLのまま（原点は動かしていない） |
 | `mona2-case_mag_L_battery.stl` / `_R_battery.stl` | ② ①のバッテリー収納穴を **51 × 33 mm** に拡大（bottom_v1/v2 と同じサイズ）。303048バッテリーが入るように |
-| `mona2-case_mag_L_battery_mag1mm.stl` / `_R_battery_mag1mm.stl` | ③ ②のマグネット穴を **1mm深く**（ダイソーのマグネットに合わせた）。穴を掘り下げた分、内側（床の上面）に高さ1mmの台座を足して床が抜けないようにしている |
+| `mona2-case_mag_L_battery_mag1mm.stl` / `_R_battery_mag1mm.stl` | ③ ②のマグネット穴を **1mm深く**（ダイソーのマグネットに合わせた）。穴を掘り下げた分、内側（床の上面）に高さ1mmの台座を足して床が抜けないようにしている。**非推奨**: この台座（Z=5〜6）が右ケース左下では親指キーの真下に来て、基板裏のソケットに当たり基板が浮いた（`docs/thumb_lift_investigation.png`） |
+| `mona2-case_mag_R_deepscrew_1.8.stl` | **現行（右）**。①（公式そのまま）から、トラックボール固定用ネジ穴2か所の座ぐりだけを **深さ1.4mm → 3.2mm** に変更（ネジ頭を受ける底の残り厚 **1.8mm**）。ネジがトラックボールケース側に深く入り、よく噛むようにするため。マグネット穴・バッテリー穴は公式のまま |
+| `mona2-case_mag_L_deepscrew_1.8.stl` | **現行（左）**。左にはトラックボール用ネジ穴がないので **①と同一データ**。右とファイル名を揃えるために置いている |
 
 右ケースのトラックボール固定用ネジ穴（2か所）:
 - 中心 X=23.66, Y=−45.18 と X=23.66, Y=−29.00（ピッチ16.18mm、元STLの座標）
-- 床の厚み 5.0mm、底面側にネジ頭用の座ぐり Ø4.5 × 深さ1.4mm、ネジ軸の穴 Ø2.6
+- 床の厚み 5.0mm、ネジ軸の穴 Ø2.6、底面側にネジ頭用の座ぐり Ø4.5
+- 座ぐりの深さ: 公式 1.4mm（残り3.6mm）→ `_deepscrew_1.8` では 3.2mm（残り1.8mm）。1.2mm / 2.4mm 残しも試作したが、強度とネジの噛みのバランスで1.8mmを採用
 
 ![公式ケース + 19mmトラックボールケース](docs/official_bottom_trackball_assembly.png)
+![ネジ座ぐり 公式 vs 1.8mm残し](docs/official_R_deepscrew_1.8_section.png)
+![mag1mm版で基板が浮いた原因の調査](docs/thumb_lift_investigation.png)
 ![バッテリー穴 加工前後](docs/battery_pocket_before_after.png)
 ![マグネット穴 +1mm](docs/magnet_1mm_result.png)
 
@@ -126,4 +134,5 @@ flowchart LR
 - 2026-10-20: 公式ケースを追加。19mm/25mmトラックボールケースに公式ケース用ネジ穴を追加
 - 2026-10-22: 公式ケースを左右に分割
 - 2026-10-31: バッテリー穴拡大版、マグネット穴+1mm版、右トッププレート v6 を追加
+- 2026-11: 右ケースのトラックボール用ネジ座ぐりを深くした `_deepscrew_1.8` を追加し、現行に。mag1mm版は基板が浮くため非推奨に
 - 2026-11: model フォルダを `original/`（無加工）と `custom/`（加工版）に整理。直下にあった `topplate_xiaocover_L.stl` は `original/topplate/` と同一ファイルだったため削除
