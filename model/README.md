@@ -18,7 +18,8 @@ model/
 │   ├── padcover/             … パッドカバー単体（zip内のSTL）
 │   └── trackball-case/       … トラックボールケース 19mm / 25mm
 ├── custom/                   … 加工済み。印刷するのはこっち
-│   ├── bottom-case-v3/       … bottom_v3 の加工版（★現行のボトムケース）
+│   ├── bottom-case-v4/       … bottom-case-v3 のバッテリー溝を bottom_v2 と同じ大きさにした版（★現行のボトムケース）
+│   ├── bottom-case-v3/       … bottom_v3 の加工版
 │   ├── bottom-case-official/ … bottom_v3 の加工版の旧置き場（残りは重複データ）
 │   ├── bottom-case-v1/       … bottom_v1 の加工版
 │   ├── top-plate/            … 右トッププレートの加工版（old/ は旧版）
@@ -30,7 +31,7 @@ model/
 
 | 部品 | 左 | 右 |
 | --- | --- | --- |
-| ボトムケース | `custom/bottom-case-v3/mona2-case_mag_L.stl`（bottom_v3 の左そのまま） | `custom/bottom-case-v3/mona2-case_mag_R_deepscrew_1.8.stl` |
+| ボトムケース | `custom/bottom-case-v4/mona2-case_mag_L_battery.stl` | `custom/bottom-case-v4/mona2-case_mag_R_deepscrew_1.8_battery.stl` |
 | トッププレート | `original/topplate/topplate_xiaocover_L.stl`（無加工） | `custom/top-plate/topplate_xiaocover_R_padcover_v6.stl` |
 | トラックボールケース | — | `custom/trackball-case/trackball-case-25mm-Body_mona2official.stl`（19mm球なら `…19mm-ortho-Body_mona2official.stl`） |
 
@@ -41,7 +42,9 @@ model/
 ```mermaid
 flowchart LR
   V3[original/bottom_v3/<br>mona2-case_mag.stl] -->|左右に分割| MAG[mona2-case_mag_L / _R]
-  MAG -->|右のみ: トラックボール用<br>ネジ座ぐりを深く| DS[…_deepscrew_1.8<br>★現行]
+  MAG -->|右のみ: トラックボール用<br>ネジ座ぐりを深く| DS[…_deepscrew_1.8]
+  MAG -->|左: バッテリー溝を<br>51×33mmに| BL[v4: …_L_battery<br>★現行]
+  DS -->|バッテリー溝を<br>51×33mmに| BR[v4: …_R_deepscrew_1.8_battery<br>★現行]
 
   TPR[original/topplate/<br>topplate_xiaocover_R] -->|パッドカバー結合| P1[old/…_padcover_v1]
   P1 -->|Xiaoカバーを左から作り直し 他| P6[…_padcover_v6]
@@ -73,20 +76,39 @@ flowchart LR
 
 ## custom/ — 加工済みデータ
 
+### bottom-case-v4/ — バッテリー溝を広げた版（★現行）
+
+`custom/bottom-case-v3/` の2ファイルはバッテリー溝が 41 × 25 mm で、バッテリーが入らなかった。
+そこで、`original/bottom_v2/`（ぴったり入ることを確認済み）と同じ **51 × 33 mm** に広げた。深さは同じ（溝の底 Z=1.2、床の上面 Z=5.0）。
+
+| ファイル | 元ファイル | 加工内容 |
+| --- | --- | --- |
+| `mona2-case_mag_L_battery.stl` | `bottom-case-v3/mona2-case_mag_L.stl` | バッテリー溝を X−側に10mm、Y−側に8mm広げた（X −204〜−153、Y −12.61〜20.39） |
+| `mona2-case_mag_R_deepscrew_1.8_battery.stl` | `bottom-case-v3/mona2-case_mag_R_deepscrew_1.8.stl` | バッテリー溝を X+側に10mm、Y−側に8mm広げた（X −9.41〜41.59、Y −15.11〜17.89）。トラックボール用ネジ座ぐり（1.8mm残し）はそのまま |
+
+溝の位置と大きさは、bottom_v2 を平行移動で bottom_v3 の座標に重ねて合わせた（左: (−170.73, −5.72, +7.92)、右: (+9.92, −8.70, +7.61)。外形が一致する）。
+ブーリアン演算は使わず、溝の壁の頂点を外側へ動かした（トポロジーは変わらない）。
+
+確認したこと:
+- 外形の大きさ（バウンディングボックス）は加工前と同じ
+- 動いた頂点はすべて新しい溝の範囲内（Z 1.2〜5.0）。それ以外の面は加工前と完全に一致
+- 床の上面の面積は −658mm²、溝の底の面積は +658mm²（= 51×33 − 41×25）。底面と天面は変化なし
+- 体積の減少は 2500.4mm³（= 658 × 3.8）で理論値と一致。向きが反転した面はない
+
 ### bottom-case-v3/ と bottom-case-official/ — bottom_v3（マグネットケース）の加工版
 
 元: `original/bottom_v3/mona2-case_mag.stl`（左右分割したものは `original/bottom_v3/mona2-case_mag_{L,R}.stl`）。
-**現行は `_deepscrew_1.8`**（bottom_v3 そのまま + 右のトラックボール用ネジ穴だけ加工）。
+`bottom_v3` そのまま + 右のトラックボール用ネジ穴だけ加工したもの（`bottom-case-v4/` の元）。
 
 ※ 以前のREADMEでは、このフォルダの元を `original/official-case/mona2_case.stl` と書いていた。実際に形状を比べると、`mona2-case_mag_L/_R.stl` は bottom_v3 を分割したものと面単位で一致し、official-case とは一致しない。違いはマグネット穴で、official-case は Ø6 の丸穴（深さ3.5mm）、bottom_v3 は約9.8×5.9mm の差し込み口の奥に 6×2mm の穴がある形（深さ4.0mm）。
 以前は、バッテリー穴拡大版（`_battery`）と、さらにマグネット穴を+1mmした版（`_battery_mag1mm`）があった。mag1mm版は基板が浮く問題（下記の調査図）があり、どちらも使わなくなったので削除した。
 
-**現行（印刷するもの）は `custom/bottom-case-v3/` の2ファイル。**
+現行は `bottom-case-v4/`（上記）。以下の `bottom-case-v3/` の2ファイルはバッテリー溝が小さい（41 × 25 mm）。
 
 | ファイル | 加工内容 |
 | --- | --- |
-| `bottom-case-v3/mona2-case_mag_L.stl` | **現行（左）**。bottom_v3 の左右一体のSTLを分割した左側。形状は無加工、座標は元STLのまま（`original/bottom_v3/mona2-case_mag_L.stl` と同一） |
-| `bottom-case-v3/mona2-case_mag_R_deepscrew_1.8.stl` | **現行（右）**。bottom_v3 の右側から、トラックボール固定用ネジ穴2か所の座ぐりだけを **深さ1.4mm → 3.2mm** に変更（ネジ頭を受ける底の残り厚 **1.8mm**）。ネジがトラックボールケース側に深く入り、よく噛むようにするため。マグネット穴・バッテリー穴は元のまま |
+| `bottom-case-v3/mona2-case_mag_L.stl` | 左。bottom_v3 の左右一体のSTLを分割した左側。形状は無加工、座標は元STLのまま（`original/bottom_v3/mona2-case_mag_L.stl` と同一） |
+| `bottom-case-v3/mona2-case_mag_R_deepscrew_1.8.stl` | 右。bottom_v3 の右側から、トラックボール固定用ネジ穴2か所の座ぐりだけを **深さ1.4mm → 3.2mm** に変更（ネジ頭を受ける底の残り厚 **1.8mm**）。ネジがトラックボールケース側に深く入り、よく噛むようにするため。マグネット穴・バッテリー穴は元のまま |
 | `bottom-case-official/mona2-case_mag_R.stl` | bottom_v3 の右側を分割しただけ（`original/bottom_v3/mona2-case_mag_R.stl` と同一） |
 | `bottom-case-official/mona2-case_mag_L_deepscrew_1.8.stl` | 左にはトラックボール用ネジ穴がないので、`bottom-case-v3/mona2-case_mag_L.stl` と同一データ |
 
@@ -144,3 +166,4 @@ mag1mm版は、マグネット穴を1mm深くし、その分床の上（Z=5〜6�
 - 2026-11: 使っていなかった `_battery` / `_battery_mag1mm` 系（左右4ファイル）と、その説明画像を削除
 - 2026-11-16: `original/bottom_v3/` を追加（マグネットケースの元STLと左右分割版）。`custom/bottom-case-official/` の元が official-case ではなく bottom_v3 だったことが分かったので、READMEの派生関係を修正
 - 2026-11-16: 現行の左右ケース（`mona2-case_mag_L.stl`、`mona2-case_mag_R_deepscrew_1.8.stl`）を `custom/bottom-case-v3/` に移動
+- 2026-11-16: バッテリーが入らなかったため、バッテリー溝を bottom_v2 と同じ 51 × 33 mm に広げた `custom/bottom-case-v4/` を追加し、現行に
