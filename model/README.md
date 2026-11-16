@@ -58,8 +58,8 @@ flowchart LR
 | ファイル | 内容・出典 |
 | --- | --- |
 | `official-case/mona2_case.stl` | moNa2公式のマグネットケース。左右が1つのSTLに入っている。元のファイル名は `mona2_case .stl`（スペース入り）だったのを修正 |
-| `bottom_v1/left_bottom.stl`, `right_bottom.stl` | ボトムケース v1。`custom/bottom-case-v1/right_bottom_trackball.stl` の元 |
-| `bottom_v2/left_bottom.stl`, `right_bottom.stl` | ボトムケース v2。現在は未使用 |
+| `bottom_v1/left_bottom.stl`, `right_bottom.stl` | ボトムケース v1。出典: [sayu-hub/zmk-config-moNa2](https://github.com/sayu-hub/zmk-config-moNa2)。`custom/bottom-case-v1/right_bottom_trackball.stl` の元 |
+| `bottom_v2/left_bottom.stl`, `right_bottom.stl` | ボトムケース v2。出典: [sayu-hub/zmk-config-moNa2](https://github.com/sayu-hub/zmk-config-moNa2)。現在は未使用 |
 | `topplate/topplate_xiaocover_L.stl`, `_R.stl` | Xiaoカバー付きトッププレート。左はそのまま印刷して使用 |
 | `padcover/padcover_moNa2.zip` | パッドカバー単体（zip内は `パッドカバー.stl`）。右トッププレートへの結合に使用 |
 | `trackball-case/trackball-case-19mm-ortho-Body.stl` | 19mmトラックボールケース。trabo-tsuki から流用 |
