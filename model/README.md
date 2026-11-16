@@ -13,11 +13,13 @@ model/
 │   ├── official-case/        … moNa2公式マグネットケース（左右一体のSTL）
 │   ├── bottom_v1/            … ボトムケース v1（左右）
 │   ├── bottom_v2/            … ボトムケース v2（左右）
+│   ├── bottom_v3/            … マグネットケース（左右一体の元STLと、左右に分割したもの）
 │   ├── topplate/             … トッププレート（Xiaoカバー付き、左右）
 │   ├── padcover/             … パッドカバー単体（zip内のSTL）
 │   └── trackball-case/       … トラックボールケース 19mm / 25mm
 ├── custom/                   … 加工済み。印刷するのはこっち
-│   ├── bottom-case-official/ … 公式マグネットケースの加工版
+│   ├── bottom-case-v3/       … bottom_v3 の加工版（★現行のボトムケース）
+│   ├── bottom-case-official/ … bottom_v3 の加工版の旧置き場（残りは重複データ）
 │   ├── bottom-case-v1/       … bottom_v1 の加工版
 │   ├── top-plate/            … 右トッププレートの加工版（old/ は旧版）
 │   └── trackball-case/       … トラックボールケースの加工版
@@ -28,7 +30,7 @@ model/
 
 | 部品 | 左 | 右 |
 | --- | --- | --- |
-| ボトムケース | `custom/bottom-case-official/mona2-case_mag_L_deepscrew_1.8.stl`（公式と同一） | `custom/bottom-case-official/mona2-case_mag_R_deepscrew_1.8.stl` |
+| ボトムケース | `custom/bottom-case-v3/mona2-case_mag_L.stl`（bottom_v3 の左そのまま） | `custom/bottom-case-v3/mona2-case_mag_R_deepscrew_1.8.stl` |
 | トッププレート | `original/topplate/topplate_xiaocover_L.stl`（無加工） | `custom/top-plate/topplate_xiaocover_R_padcover_v6.stl` |
 | トラックボールケース | — | `custom/trackball-case/trackball-case-25mm-Body_mona2official.stl`（19mm球なら `…19mm-ortho-Body_mona2official.stl`） |
 
@@ -38,9 +40,7 @@ model/
 
 ```mermaid
 flowchart LR
-  OC[original/official-case/<br>mona2_case.stl] -->|左右に分割| MAG[mona2-case_mag_L / _R]
-  MAG -->|バッテリー穴拡大| BAT[…_battery]
-  BAT -->|マグネット穴 +1mm| M1[…_battery_mag1mm<br>※非推奨]
+  V3[original/bottom_v3/<br>mona2-case_mag.stl] -->|左右に分割| MAG[mona2-case_mag_L / _R]
   MAG -->|右のみ: トラックボール用<br>ネジ座ぐりを深く| DS[…_deepscrew_1.8<br>★現行]
 
   TPR[original/topplate/<br>topplate_xiaocover_R] -->|パッドカバー結合| P1[old/…_padcover_v1]
@@ -59,31 +59,36 @@ flowchart LR
 
 | ファイル | 内容・出典 |
 | --- | --- |
-| `official-case/mona2_case.stl` | moNa2公式のマグネットケース。左右が1つのSTLに入っている。元のファイル名は `mona2_case .stl`（スペース入り）だったのを修正 |
-| `bottom_v1/left_bottom.stl`, `right_bottom.stl` | ボトムケース v1。`custom/bottom-case-v1/right_bottom_trackball.stl` の元 |
-| `bottom_v2/left_bottom.stl`, `right_bottom.stl` | ボトムケース v2。現在は未使用 |
-| `topplate/topplate_xiaocover_L.stl`, `_R.stl` | Xiaoカバー付きトッププレート。左はそのまま印刷して使用 |
-| `padcover/padcover_moNa2.zip` | パッドカバー単体（zip内は `パッドカバー.stl`）。右トッププレートへの結合に使用 |
-| `trackball-case/trackball-case-19mm-ortho-Body.stl` | 19mmトラックボールケース。trabo-tsuki から流用 |
-| `trackball-case/trackball-case-25mm-Body.stl` | 25mmトラックボールケース |
+| `official-case/mona2_case.stl` | moNa2公式のマグネットケース。出典: [sayu:works（STORES）](https://sayuworks.stores.jp/)。左右が1つのSTLに入っている。元のファイル名は `mona2_case .stl`（スペース入り）だったのを修正 |
+| `bottom_v1/left_bottom.stl`, `right_bottom.stl` | ボトムケース v1。出典: [sayu-hub/zmk-config-moNa2](https://github.com/sayu-hub/zmk-config-moNa2)。`custom/bottom-case-v1/right_bottom_trackball.stl` の元 |
+| `bottom_v2/left_bottom.stl`, `right_bottom.stl` | ボトムケース v2。出典: [sayu-hub/zmk-config-moNa2](https://github.com/sayu-hub/zmk-config-moNa2)。現在は未使用 |
+| `bottom_v3/mona2-case_mag.stl` | マグネットケース（左右一体）。出典: [dgarai/zmk-config-moNa2 の `model/case/mona2-case_mag.stl`](https://github.com/dgarai/zmk-config-moNa2/blob/main/model/case/mona2-case_mag.stl)。`official-case/mona2_case.stl` とはマグネット穴の形が違う（下記） |
+| `bottom_v3/mona2-case_mag_L.stl`, `_R.stl` | 上の左右一体STLを左右に分割しただけ。形状・座標は元のまま。`custom/bottom-case-v3/` の加工元 |
+| `topplate/topplate_xiaocover_L.stl`, `_R.stl` | Xiaoカバー付きトッププレート。出典: [sayu:works（STORES）](https://sayuworks.stores.jp/items/692d55656e431238dccf8fb7)、[sayu-hub/zmk-config-moNa2](https://github.com/sayu-hub/zmk-config-moNa2)。左はそのまま印刷して使用 |
+| `padcover/padcover_moNa2.zip` | パッドカバー単体（zip内は `パッドカバー.stl`）。出典: [sayu:works（STORES）](https://sayuworks.stores.jp/)。右トッププレートへの結合に使用 |
+| `trackball-case/trackball-case-19mm-ortho-Body.stl` | 19mmトラックボールケース。torabo-tsuki から流用。出典: [sekigon-gonnoc/torabo-tsuki-lp](https://github.com/sekigon-gonnoc/torabo-tsuki-lp/tree/master/3d-models/STL) |
+| `trackball-case/trackball-case-25mm-Body.stl` | 25mmトラックボールケース。出典: [sekigon-gonnoc/torabo-tsuki-lp](https://github.com/sekigon-gonnoc/torabo-tsuki-lp/tree/master/3d-models/STL) |
 
 ---
 
 ## custom/ — 加工済みデータ
 
-### bottom-case-official/ — 公式マグネットケースの加工版
+### bottom-case-v3/ と bottom-case-official/ — bottom_v3（マグネットケース）の加工版
 
-元: `original/official-case/mona2_case.stl`。
-**現行は `_deepscrew_1.8`**（公式そのまま + 右のトラックボール用ネジ穴だけ加工）。
-`_battery` / `_battery_mag1mm` 系は下記の問題があったため使っていない（記録として残している）。
+元: `original/bottom_v3/mona2-case_mag.stl`（左右分割したものは `original/bottom_v3/mona2-case_mag_{L,R}.stl`）。
+**現行は `_deepscrew_1.8`**（bottom_v3 そのまま + 右のトラックボール用ネジ穴だけ加工）。
+
+※ 以前のREADMEでは、このフォルダの元を `original/official-case/mona2_case.stl` と書いていた。実際に形状を比べると、`mona2-case_mag_L/_R.stl` は bottom_v3 を分割したものと面単位で一致し、official-case とは一致しない。違いはマグネット穴で、official-case は Ø6 の丸穴（深さ3.5mm）、bottom_v3 は約9.8×5.9mm の差し込み口の奥に 6×2mm の穴がある形（深さ4.0mm）。
+以前は、バッテリー穴拡大版（`_battery`）と、さらにマグネット穴を+1mmした版（`_battery_mag1mm`）があった。mag1mm版は基板が浮く問題（下記の調査図）があり、どちらも使わなくなったので削除した。
+
+**現行（印刷するもの）は `custom/bottom-case-v3/` の2ファイル。**
 
 | ファイル | 加工内容 |
 | --- | --- |
-| `mona2-case_mag_L.stl` / `_R.stl` | ① 左右一体のSTLを左右に分割しただけ。形状は無加工。座標は元STLのまま（原点は動かしていない） |
-| `mona2-case_mag_L_battery.stl` / `_R_battery.stl` | ② ①のバッテリー収納穴を **51 × 33 mm** に拡大（bottom_v1/v2 と同じサイズ）。303048バッテリーが入るように |
-| `mona2-case_mag_L_battery_mag1mm.stl` / `_R_battery_mag1mm.stl` | ③ ②のマグネット穴を **1mm深く**（ダイソーのマグネットに合わせた）。穴を掘り下げた分、内側（床の上面）に高さ1mmの台座を足して床が抜けないようにしている。**非推奨**: この台座（Z=5〜6）が右ケース左下では親指キーの真下に来て、基板裏のソケットに当たり基板が浮いた（`docs/thumb_lift_investigation.png`） |
-| `mona2-case_mag_R_deepscrew_1.8.stl` | **現行（右）**。①（公式そのまま）から、トラックボール固定用ネジ穴2か所の座ぐりだけを **深さ1.4mm → 3.2mm** に変更（ネジ頭を受ける底の残り厚 **1.8mm**）。ネジがトラックボールケース側に深く入り、よく噛むようにするため。マグネット穴・バッテリー穴は公式のまま |
-| `mona2-case_mag_L_deepscrew_1.8.stl` | **現行（左）**。左にはトラックボール用ネジ穴がないので **①と同一データ**。右とファイル名を揃えるために置いている |
+| `bottom-case-v3/mona2-case_mag_L.stl` | **現行（左）**。bottom_v3 の左右一体のSTLを分割した左側。形状は無加工、座標は元STLのまま（`original/bottom_v3/mona2-case_mag_L.stl` と同一） |
+| `bottom-case-v3/mona2-case_mag_R_deepscrew_1.8.stl` | **現行（右）**。bottom_v3 の右側から、トラックボール固定用ネジ穴2か所の座ぐりだけを **深さ1.4mm → 3.2mm** に変更（ネジ頭を受ける底の残り厚 **1.8mm**）。ネジがトラックボールケース側に深く入り、よく噛むようにするため。マグネット穴・バッテリー穴は元のまま |
+| `bottom-case-official/mona2-case_mag_R.stl` | bottom_v3 の右側を分割しただけ（`original/bottom_v3/mona2-case_mag_R.stl` と同一） |
+| `bottom-case-official/mona2-case_mag_L_deepscrew_1.8.stl` | 左にはトラックボール用ネジ穴がないので、`bottom-case-v3/mona2-case_mag_L.stl` と同一データ |
 
 右ケースのトラックボール固定用ネジ穴（2か所）:
 - 中心 X=23.66, Y=−45.18 と X=23.66, Y=−29.00（ピッチ16.18mm、元STLの座標）
@@ -92,9 +97,9 @@ flowchart LR
 
 ![公式ケース + 19mmトラックボールケース](docs/official_bottom_trackball_assembly.png)
 ![ネジ座ぐり 公式 vs 1.8mm残し](docs/official_R_deepscrew_1.8_section.png)
-![mag1mm版で基板が浮いた原因の調査](docs/thumb_lift_investigation.png)
-![バッテリー穴 加工前後](docs/battery_pocket_before_after.png)
-![マグネット穴 +1mm](docs/magnet_1mm_result.png)
+![mag1mm版（削除済み）で基板が浮いた原因の調査](docs/thumb_lift_investigation.png)
+
+mag1mm版は、マグネット穴を1mm深くし、その分床の上（Z=5〜6）に台座を足していた。この台座が右ケース左下で親指キーの真下に来て、基板裏のソケットに当たり、基板が約0.85mm浮いた。
 
 ### bottom-case-v1/ — bottom_v1 の加工版
 
@@ -117,7 +122,7 @@ flowchart LR
 
 ### trackball-case/ — トラックボールケースの加工版
 
-公式マグネットケース（`custom/bottom-case-official/`）の右側には、トラックボールケース固定用のネジ穴が2つ（ピッチ16.18mm）しかない。
+マグネットケース（`custom/bottom-case-v3/`）の右側には、トラックボールケース固定用のネジ穴が2つ（ピッチ16.18mm）しかない。
 そこで、**ボトムケース側は無加工のまま、トラックボールケース側にその2穴に合うネジ穴を追加**した。ボールの中心が2穴の中点に来る位置にしている。
 
 | ファイル | 元ファイル | 加工内容 |
@@ -136,3 +141,6 @@ flowchart LR
 - 2026-10-31: バッテリー穴拡大版、マグネット穴+1mm版、右トッププレート v6 を追加
 - 2026-11: 右ケースのトラックボール用ネジ座ぐりを深くした `_deepscrew_1.8` を追加し、現行に。mag1mm版は基板が浮くため非推奨に
 - 2026-11: model フォルダを `original/`（無加工）と `custom/`（加工版）に整理。直下にあった `topplate_xiaocover_L.stl` は `original/topplate/` と同一ファイルだったため削除
+- 2026-11: 使っていなかった `_battery` / `_battery_mag1mm` 系（左右4ファイル）と、その説明画像を削除
+- 2026-11-16: `original/bottom_v3/` を追加（マグネットケースの元STLと左右分割版）。`custom/bottom-case-official/` の元が official-case ではなく bottom_v3 だったことが分かったので、READMEの派生関係を修正
+- 2026-11-16: 現行の左右ケース（`mona2-case_mag_L.stl`、`mona2-case_mag_R_deepscrew_1.8.stl`）を `custom/bottom-case-v3/` に移動
