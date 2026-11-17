@@ -4,17 +4,6 @@
 #include <dt-bindings/zmk/runtime_input_processor.h>
 #include <zephyr/dt-bindings/input/input-event-codes.h>
 
-/ {
-    // カスタム入力プロセッサー: 閾値付き一時レイヤー
-    zip_threshold_temp_layer: input_processor_threshold_temp_layer {
-        compatible = "zmk,input-processor-threshold-temp-layer";
-        #input-processor-cells = <2>;
-        activation-threshold = <100>;  // トラックボールを100ピクセル移動後にオートマウスレイヤーへ切り替え
-        require-prior-idle-ms = <0>;
-        excluded-positions = <>;
-    };
-};
-
 &default_transform {
     col-offset = <6>;
 };
@@ -72,24 +61,23 @@
 // Overrides for the input listener node
 //
 // 旧構成（gohanda11 threshold-temp-layer + 標準 input processor + kot149 scroll-snap）と
-// 同じ向き・量になるよう、スクロールと感度を DYA Studio から変更できる runtime input processor に移した。
+// 同じ向き・量になるよう、DYA Studio から変更できる runtime input processor に置き換えた。
 //   ドライバ出力 = そのまま（PAW3222 は反転なし。dtsi の Y 反転は overlay で上書きされ、もともと効いていない）
-//   マウス      = 100 カウント動いたら MOUSE レイヤー(4)へ、500ms で解除（gohanda11 版のまま）
-//                 → 感度・回転などは mouse runtime processor（DYA Studio）で調整
+//   マウス      = そのまま、動かすと MOUSE レイヤー(4)へ自動切り替え、500ms で解除
+//                 ※ 旧構成の「100 カウント動いてから」のしきい値は無くなった
+//                   （gohanda11 版が ZMK main でビルドできないため。runtime processor には移動量しきい値が無い）
 //   スクロール  = SCROLL レイヤー(5)のときだけ。X→横 / Y→縦、縦は反転、1/10 倍、縦方向にスナップ
-// scroller は override なので、SCROLL レイヤー中はオートマウス側を通らない（旧構成と同じ）。
+// scroll を先に置くことで、SCROLL レイヤー中は mouse 側（オートマウス）を通らない。
 &trackball_central_listener {
     status = "okay";
     device = <&trackball_central>;
+    input-processors = <&scroll_runtime_input_processor &mouse_runtime_input_processor>;
+};
 
-    // オートマウスは DYA Studio ではなく上の activation-threshold で決める
-    // （runtime processor の temp-layer には移動量しきい値が無いため使わない）
-    input-processors = <&zip_threshold_temp_layer 4 500>, <&mouse_runtime_input_processor>;
-
-    scroller {
-        layers = <5>;   // レイヤー5 = SCROLL
-        input-processors = <&scroll_runtime_input_processor>;
-    };
+&mouse_runtime_input_processor {
+    temp-layer-enabled;
+    temp-layer = <4>;                           // 4 = MOUSE（オートマウスレイヤー）
+    temp-layer-deactivation-delay-ms = <500>;   // 旧 zip_threshold_temp_layer 4 500 と同じ
 };
 
 &scroll_runtime_input_processor {

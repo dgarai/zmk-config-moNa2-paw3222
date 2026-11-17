@@ -16,8 +16,6 @@ manifest:
       url-base: https://github.com/caksoylar
     - name: sekigon-gonnoc  # <-- PAW3222
       url-base: https://github.com/sekigon-gonnoc
-    - name: gohanda11  # <-- Threshold Temp Layer
-      url-base: https://github.com/gohanda11
   projects:
     # --- ZMK 本体（cormoran fork）と Zephyr ---------------------------------
     - name: zmk
@@ -64,10 +62,6 @@ manifest:
       remote: sekigon-gonnoc
       revision: main
     - name: zmk-module-runtime-input-processor
-    # オートマウス（100 カウント動いてから MOUSE レイヤーへ）は従来どおり gohanda11 版
-    - name: zmk-input-processor-threshold-temp-layer
-      remote: gohanda11
-      revision: main
 
     # --- Connection タブ ---------------------------------------------------
     - name: zmk-module-ble-management
