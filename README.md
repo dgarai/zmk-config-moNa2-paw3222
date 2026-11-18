@@ -59,6 +59,9 @@ artifacts from the repository's **Actions** page.
 
 - ZMK 本体は Custom Studio Protocol 対応の [cormoran/zmk `main+dya`](https://github.com/cormoran/zmk/tree/main+dya)（Zephyr 4.1）。実験的な fork なので、壊れたら旧構成のファームに戻す
 - 右手側を USB でつなぎ、Chrome / Edge で開いて「USB」を選ぶ（Bluetooth 接続も可）
+- 接続前に Studio Unlock キーを押す（USB / Bluetooth とも）。切断時と 10 分無操作で自動ロックされる
+  - Unlock キーは keymap に書かず、DYA Studio でビヘイビア「Studio Unlock」を任意のキーに割り当てる（keymap は v2 から同期されるため）
+  - Bluetooth は、Unlock を押すと接続中でもアドバタイズが再開され、ブラウザの一覧に出るようになる
 - Trackball タブで変更できるのは、runtime input processor の部分（感度・回転・反転・スクロール量・スナップ・オートマウス）だけ。初期値は旧構成と同じ向き・量に合わせてある（`boards/shields/mona2/mona2_r.overlay`）
 - **センサー固有の設定（CPI・省電力など）は未対応表示になる。** PAW3222 用の DYA Studio 対応ドライバが無く、sekigon 版ドライバを使っているため。CPI は overlay の `res-cpi` で決める
 - オートマウス（MOUSE レイヤー 4 へ自動切り替え、500ms で解除）も Trackball タブで変更できる。旧構成にあった「100 カウント動いてから入る」しきい値は無くなった（gohanda11 の threshold-temp-layer が ZMK main でビルドできないため）。微小な揺れで MOUSE レイヤーに入るようなら、Trackball タブの設定で調整する
